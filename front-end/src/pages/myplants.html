@@ -1,0 +1,133 @@
+<!--
+myplants.html
+This file displays the user's saved plants and provides functionality to add new plants.
+It includes a navigation sidebar, a display grid of saved plants, and a popup form 
+for adding new plants to the user's collection.
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="myplants.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Plants</title>
+    
+</head>
+<body>
+    <div class="page-container">
+        <header>
+            <h1>My Saved Plants</h1>
+        </header>
+        <div class="sidebar">
+            <a href = "userLogin.html">Login</a>
+            <a href = "logoutPage.html">Logout</a>
+            <a href = "profilepage.html">My Profile</a>
+            <a href = "myplants.html">View Plants</a>
+            <a href = "plantMap.html">View Map</a>
+            <a href = "AboutUs.html">About Us</a>
+        </div>
+
+        <main>
+            <div class="plants-container" id="plants-container"> 
+                <div class="plant">
+                    <h2>Name of plant 1</h2>
+                    <p>When linked with the backend, plants will be populated</p>
+                </div>
+                <div class="plant">
+                    <h2>Name of Plant 2</h2>
+                    <p>Description of plant 2.</p>
+                </div>
+                <div class="plant">
+                    <h2>Name of Plant 3</h2>
+                    <p>Description of plant 3.</p>
+                </div>
+
+                <div class="addPlantButton plant" id="addPlantButton">
+                    <h2>Add a new plant here</h2>
+                </div>
+                
+            </div>
+        </main>
+
+
+<!--Add plant popup-->
+<div class="addPlant-container">
+    <div class="addPlant-popup" id="addPlant-popup">
+    
+        <div class="close-popup"> 
+            <button class="close-btn" onclick="closeSideBar()">X</button>
+        </div>
+        <div class="popup-header">
+            <h2>Add a new plant <br>to your collection</h2>
+            
+        </div>
+        <div class="popup-content">
+            <form>
+                <label for="plantPic">Upload a photo:</label>
+                <input type="file" id="plantPic">
+                <br>
+                <label for="name">Type of plant:</label>
+                <input type="textbox" id="name">
+                    <br>
+                <label for="desc">Description:</label>
+                <input type="textbox" id="desc">
+                    <br>
+                <label for="plantTime">When it was planted:</label>
+                <input type="date" id="plantTime">
+                    <br>
+                    <div class="btn-container">
+                        <button type="button" onclick="addPlant()">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script>
+    /* When add new plant btn is clicked it blurs the screen and shows the form */
+     document.getElementById("addPlantButton").addEventListener("click", openAddPlantPopup);
+     function openAddPlantPopup(){
+        document.getElementById("addPlant-popup").style.display = "block";
+        document.getElementById("plants-container").style.filter = "blur(5px)";
+     }  
+/**
+* Closes the add plant popup form and removes the blur effect
+* @input - None 
+@output - Hides the popup form and removes blur effect fron the background
+*/
+        
+    /* Close sidebar */
+    function closeSideBar() {
+        document.getElementById("addPlant-popup").style.display = "none";
+        document.getElementById("plants-container").style.filter = "none";
+    }
+        /**
+        * Creates a new plant entry from form data and adds it to the plants container 
+        * @input - None (reads values fron form fields)
+        * @output - Creates and inserts a new plant element in the DOM 
+        */
+
+    /* Adds new post by getting the stuff from the form */
+    function addPlant() {
+        const grid = document.getElementById("plants-container");
+        const newPlant = document.createElement("plant");
+        const name = document.getElementById("name").value;
+        const desc = document.getElementById("desc").value;
+        const date = document.getElementById("plantTime").value;
+
+        newPlant.classList.add("plant");
+        newPlant.innerHTML = `
+        <h2>${name}</h2>
+            <p>${desc}</p>
+            <p>Planted On:${date}</p>`;
+
+        grid.insertBefore(newPlant, addPlantButton);
+        document.querySelector(".addPlant-container form").reset();
+        closeSideBar();
+}
+
+
+    </script>
+    </body>
+</html>

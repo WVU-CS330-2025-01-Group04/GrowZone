@@ -1,0 +1,38 @@
+<!--
+logoutPage.html
+Thihs file provides a logout interface for the GrowZone application.
+It includes a confirmation checkbox that must be selected before 
+the user can log out of their account
+-->
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <link rel="stylesheet" href="logoutPage.css">
+        <title>Grow Zone</title>
+        
+        <script src = "frontEndUser.js" defer></script>
+        
+    </head>
+    <body>
+        <h1>Logout</h1>
+
+        <h2>Thanks for growing with us, bud!</h2>
+        <!--The following form requires that the user clicks the check box before logging out-->
+        <div id="logoutContainer">
+            <form id="logoutForm">
+                <div class="logout">
+                    <label for="logout-checkbox"><b>Are you sure you want to log out?</b></label>
+                    <input type="checkbox" id="logout-checkbox" name="logout-checkbox">
+                    <br>
+                    <button type="submit" class="logout-button" onclick="logoutUser(event)">Log Out</button>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>
+
+/**
+* Handles the user logout process when the logout button is clicked 
+* @param {Event} event - The click even object 
+* @returns {boolean} - Returns false to prevent default form submission 
+*/

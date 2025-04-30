@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="userRegister.css">
+    <title>Grow Zone</title>
+    <script src="frontenduser.js"></script>
+    
+</head>
+
+<body>
+    <h1>Welcome to GrowZone</h1>
+
+    <!-- need to figure out why CSS isnt working now -->
+
+    <!-- Registration Form -->
+    <div id="loginContainer">
+        <div class = "login">
+        <h2>Register</h2>
+        <form onsubmit="handleRegistration(event)" method = "post">
+            <label for="newUsername">Username:</label>
+            <input type="text" id="newUsername" name="newUsername" required>
+
+            <label for="newPassword">Password:</label>
+            <input type="password" id="newPassword" name="newPassword" required>
+
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required>
+
+            <button type="submit">Register</button>
+        </form>
+        <div class = "switch-form">
+        <p>Already have an account? <a href="#" onclick="redirectLogin(event)">Back to Login</a></p>
+    </div>
+    </div>
+    </div>
+
+</body>
+
+</html>
