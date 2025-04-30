@@ -1,0 +1,137 @@
+/* this is the same sidebar as the other pages that use it*/
+
+.sidebar {
+    width: 200px;
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    margin: 10px 0;
+}
+
+.sidebar a:hover {
+    background-color: #575757;
+    padding-left: 10px;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif; /* Added for better readability */
+    background: linear-gradient(135deg, #f1f8e9, #c8e6c7, #a5d6a7); /* pretty light green gradient :) */
+    min-height: 100vh; /* Sets the body height to the full viewport height */
+    color: 3333; /* Default text color */
+}
+
+.main-content{
+    margin-left: 240px;
+    padding: 30px;
+    display: flex; /* Added to align items in the center */
+    flex-direction: column; /* Added to stack items vertically */
+    align-items: center; /* Added to center items horizontally */
+    min-height: 100vh; /* Ensures the main content takes full height */
+}
+
+.profile-container{
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 40px;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.9); /* Semi-transparent white TWEAKING THIS */
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.profile-header{
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #a5d6a7; /* Light green border */
+    position: relative;
+}
+
+.profile-info{
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+.profile-info p{
+    margin: 10px 0;
+    font-size: 16px;
+    padding: 10px; /* Added padding for better spacing */
+    background-color: #f1f8e9; /* Light green background */
+    border-left: 4px solid #4CAF50; /* Darker green border */
+    margin-bottom: 30px;
+}
+
+.profile-label{
+    font-weight: bold;
+    color: #2e7d32; /* Same color as the user login page */
+    margin-right: 8px;
+}
+
+h1{
+    margin-left: 0;
+    padding: 20px 0;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 2.5rem; /* Increased font size for the title */
+    color: #2e7d32; /* Same color as the user login page */
+    letter-spacing: 1px; /* Added letter spacing for better readability */
+    position: relative; /* Added for the underline effect */
+    display: inline-block; /* Added to make the underline effect work */
+}
+
+.logo{
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.avatar-container{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px
+}
+
+.avatar{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #c8e6c7; /* save this to color pallet!*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem; /* Increased font size for the avatar text */
+    color: #2e7d32; /* Same color as the user login page */
+    border: 4px solid #4CAF50; /* Darker green border (save to color pallet) */
+}
+
+.plant-badge{
+    background-color: #4CAF50; /* Darker green background (save to colr pallet)*/
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: .9rem; /* Increased font size for the badge */
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.edit-profile {
+    text-align: right;
+    margin-top: -20px;
+    margin-right: -20px;
+}
+
+.edit-profile button {
+    background-color: white;
+    border: none;
+    color: black;
+    height: 20px;
+}

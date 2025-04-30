@@ -1,0 +1,114 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.page-container {
+    display: grid;
+    grid-template-columns: 10vw 1fr;
+    grid-template-rows: auto 1fr; 
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+header {
+    background-color: #114b13;
+    color: white;
+    padding: 1em 0;
+    text-align: center;
+    width: 100%;
+    grid-column: 1 / span 2;
+}
+
+.sidebar {
+    font-family: Arial, sans-serif;
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 10vw;
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    margin: 10px 0;
+}
+
+.sidebar a:hover {
+    background-color: #575757;
+    padding-left: 10px;
+}
+
+.plants-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 200px);
+    gap: 50px;
+    padding: 1em;
+    margin-left: 5vw;
+    width: calc(100% - 5vw);
+    grid-auto-flow: row dense;
+}
+
+.plant {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 200px;
+    height: 200px;
+}
+
+h1, h2 {
+    margin: 0;
+}
+
+.addPlantButton {
+    opacity: 50%;
+}
+
+.addPlantButton:hover {
+    opacity: 100%;
+    transition: 0.5s ease;
+}
+
+.addPlant-popup {
+    position: fixed;
+    display: none;
+    width: 40vh;
+    height: 50vh;
+    z-index: 2;
+    top: 25%;
+    left: 40%;
+    background-color: #f1f8e9;
+    opacity: 1;
+    border: 1px solid black;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.popup-header {
+    text-align: center;
+    padding-top: 10px;
+}
+
+.popup-content {
+    margin: 1em;
+}
+
+.btn-container {
+    text-align: center;
+    margin-top: 1em;
+}
+
+.close-popup {
+    text-align: right;
+    padding-right: 2%;
+    padding-top: 2%;
+}

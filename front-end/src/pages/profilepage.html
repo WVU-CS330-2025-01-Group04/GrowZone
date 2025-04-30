@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="profilepage.css">
+    <title>Grow Zone - Profile</title>
+    <script src="https://kit.fontawesome.com/4478ae48e7.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <!-- same sidebar as the other pages -->
+    <div class="sidebar">
+        <a href="userLogin.html">Login</a>
+        <a href="logoutPage.html">Logout</a>
+        <a href="profilepage.html">My Profile</a>
+        <a href="myplants.html">View Plants</a>
+        <a href="plantMap.html">View Map</a>
+        <a href="AboutUs.html">About Us</a>
+    </div>
+
+    <div class="main-content">
+        <div class="logo">
+            <h1>GrowZone</h1>
+        </div>
+
+        <div class="profile-container">
+            <div class="edit-profile-container">
+                <div class="edit-profile">
+                    <button>
+                        <a href="editProfile.html">
+                            <i class="fa-solid fa-gear fa-lg"></i>
+                        </a>
+                    </button>
+
+                </div>
+            </div>
+            <div class="avatar-container">
+                <div class="avatar" id="userAvatar">U</div>
+            </div>
+
+            <div class="profile-header">
+                <h2>My Profile</h2>
+            </div>
+
+            <div class="profile-info" id="userInfo">
+                <p>
+                    <span class="profile-label">Username:</span>
+                    <span id="displayUsername">Loading...</span>
+                </p>
+                <p>
+                    <span class="profile-label">Plants:</span>
+                    <span id="displayPlants">Loading...</span>
+                    <span class="plant-badge" id="plant-badge">0</span>
+                </p>
+            </div>
+        </div>
+    </div>
+    <script>
+        async function loadProfile() {
+            try {
+                const response = await fetch('http://localhost:4002/profile', {
+                    method: 'GET',
+                    credentials: 'include'
+                })
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('displayUsername').textContent = data.username || 'N/A';
+                    document.getElementById('displayPlants').textContent = data.plantCount || 0;
+                    document.getElementById('plant-badge').textContent = data.plantCount || 0;
+
+                    if (data.username && data.username.length > 0) {
+                        document.getElementById('userAvatar').textContent = data.username.charAt(0).toUpperCase();
+                    }
+                } else {
+                    alert(data.message || 'Unable to load profile.');
+                    window.location.href = 'userLogin.html'; // kick back to login
+                }
+            } catch (err) {
+                console.error('Error loading profile:', err);
+                alert('Error loading profile.');
+                window.location.href = 'userLogin.html'; // redirect on serious error
+            }
+        }
+
+        loadProfile();
+
+    </script>
+</body>
+
+</html>

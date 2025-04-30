@@ -1,0 +1,35 @@
+<!--The purpose of this file is to login a user and save their information to our user information database-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="userLogin.css">
+    <title>Grow Zone</title>
+    <script src="frontenduser.js" defer></script>
+
+</head>
+<body>
+    <h1>Welcome to GrowZone</h1>
+
+    <!-- Login Form -->
+     <!--This form allows the existing user to enter their username and password -->
+    <div id="loginContainer">
+        <div class = "login">
+        <h2>Login</h2>
+        <form onsubmit="handleLogin(event)" method = "post">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Login</button>
+        </form>
+        <div class = "switch-form">
+        <p>Don't have an account? <a href="#" onclick="redirectRegistration(event)">Register here</a></p>
+    </div>
+    </div>
+    </div>
+</body>
+</html>

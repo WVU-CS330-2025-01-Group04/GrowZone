@@ -1,0 +1,75 @@
+body {
+    background-image: url("https://wallpaperaccess.com/full/8477800.jpg");
+    background-size: cover; /* Better than 100% for responsive behavior */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    min-height: 100vh; /* Sets the body height to the full viewport height */
+    margin: 0; /* Removes default margin */
+    padding: 0; /* Removes default padding */
+    font-family: Arial, sans-serif; /* Added for better readability */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    text-align: center;
+    color: #2e7d32; /* same color as the user login page! */
+    margin-top: 30px;
+    text-align: center;
+    font-size: 2.5rem; /* same responsive font size as login*/
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* same text shadow as login*/
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+#logoutContainer{
+    width: 90%;
+    max-width: 400px;
+    margin: auto;
+}
+
+.logout {
+    background-color: rgba(255, 255, 255, 0.9); 
+    text-align: center;
+    display: block;
+    padding: 30px;
+    border-radius: 10px; /* Optional: Rounds the corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds subtle shadow */
+}
+
+.logout label {
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.logout-button {
+    display: block;
+    width: 50%;
+    margin: 20px auto 10px;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: linear-gradient(to right, #4CAF50, #45a049); /* Green gradient */
+    color: white;
+    cursor: pointer; /* Changes cursor to pointer on hover */
+}
+
+.logout-button:hover {
+    background: linear-gradient(to right, #45a049, #3d8b3d); /* Darker green on hover */
+}
+
+/* Added styling for the checkbox */
+#logout-checkbox {
+    transform: scale(1.5);
+    margin-left: 10px;
+    vertical-align: middle;
+}
