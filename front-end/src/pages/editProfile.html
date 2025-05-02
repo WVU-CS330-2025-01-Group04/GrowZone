@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+<!--
+* profilePage.html - This files handles the user profile management interface for the GrowZone application,
+* It allows users to view and edit their profile information, including username and displays plant count.
+* The page includes authentication checks and communicates with the backend server for profile operations.
+-->
 <html lang="en">
 <head>
     <link rel="stylesheet" href="profilepage.css">
@@ -119,6 +124,12 @@
         // Load the profile when the page is loaded
         //window.onload = loadUserProfile;
 
+        /**
+        * Input: event - The DOM content loaded event (not used directly)
+        * Output: None, but updates the UI with the user's profile information 
+        * This function verifies user authentication, fetches profile data, and updates the UI elements
+        */
+
         async function loadEditProfile(event){
             try{
                 // check if the user is authenticated
@@ -164,6 +175,12 @@
                 alert("Error loading the profile.");
             }
         }
+
+            /**
+            * Input: event - The click event from the save button (not used directly)
+            * Output: None, but sends update request to server and handles the response 
+            * This function validates the new username, sends it to the server, and handles success/failure
+            */
 
         async function saveUsername(event){
             const newUsername = document.getElementById("usernameInput").value.trim();
