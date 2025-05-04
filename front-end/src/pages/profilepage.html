@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+<!--
+* Profile Page (profilepage.html)
+* This file displays the user's profile information including username and plant count
+* It fetches user data from the backend API and displays it on the page 
+* The page redirects to login if the user is not authenticates 
+-->
 <html lang="en">
 
 <head>
@@ -56,6 +62,11 @@
         </div>
     </div>
     <script>
+        /**
+        * @input - No direct input parameters, uses credentials from cookies
+        @ output Updates the DOM with user profile information (username, plant count)
+        */
+        
         async function loadProfile() {
             try {
                 const response = await fetch('http://localhost:4002/profile', {
