@@ -15,12 +15,14 @@
     color: white;
     text-decoration: none;
     display: block;
-    margin: 10px 0;
+    margin: 12px 0;
+    font-size: 1rem;
+    transition: all 0.3s ease;
 }
 
 .sidebar a:hover {
     background-color: #575757;
-    padding-left: 10px;
+    padding-left: 12px;
 }
 
 body{
