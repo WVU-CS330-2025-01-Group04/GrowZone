@@ -1,19 +1,16 @@
 <!DOCTYPE html>
-<!--
-* profilePage.html - This files handles the user profile management interface for the GrowZone application,
-* It allows users to view and edit their profile information, including username and displays plant count.
-* The page includes authentication checks and communicates with the backend server for profile operations.
--->
 <html lang="en">
+
 <head>
     <link rel="stylesheet" href="profilepage.css">
+    <script src="frontEndUser.js" defer></script>
     <title>Grow Zone - Profile</title>
     <script src="https://kit.fontawesome.com/4478ae48e7.js" crossorigin="anonymous"></script>
 </head>
+
 <body>
     <!-- same sidebar as the other pages -->
     <div class="sidebar">
-        <a href="userLogin.html">Login</a>
         <a href="logoutPage.html">Logout</a>
         <a href="profilepage.html">My Profile</a>
         <a href="myplants.html">View Plants</a>
@@ -55,172 +52,6 @@
             </div>
         </div>
     </div>
-
-    <script>
-        // leave the local save code while troubleshooting - tay
-        // Function to load and display user profile info
-       // function loadUserProfile() {
-         //   const currentUser = localStorage.getItem("growZoneCurrentUser");
-           // if (!currentUser) {
-             //   alert("No user logged in. Redirecting to login page.");
-               // window.location.href = "userLogin.html"; // redirect to login page if no user is logged in
-               // return;
-            //}
-
-            //const usersData = JSON.parse(localStorage.getItem("growZoneUsers")) || {};
-            //const userData = usersData[currentUser];
-
-            //if (!userData) {
-              //  alert("User data not found. Redirecting to login page.");
-                //window.location.href = "userLogin.html"; // redirect to login page if user data is not found
-                //return;
-            //}
-
-            // Display the user data
-            //document.getElementById("usernameInput").value = currentUser;
-            //const plantCount = userData.plants || 0;
-            //document.getElementById("displayPlants").textContent = plantCount;
-            //document.getElementById("plant-badge").textContent = plantCount;
-
-            // Set the avatar letter to the first letter of the username
-            //if (currentUser && currentUser.length > 0) {
-              //  document.getElementById("userAvatar").textContent = currentUser.charAt(0).toUpperCase();
-            //}
-        //}
-
-        // Function to save the new username and redirect
-        //function saveUsername() {
-          //  const newUsername = document.getElementById("usernameInput").value.trim();
-            //if (newUsername) {
-              //  const currentUser = localStorage.getItem("growZoneCurrentUser");
-
-                //if (currentUser !== newUsername) {
-                  //  const usersData = JSON.parse(localStorage.getItem("growZoneUsers")) || {};
-
-                    // Update the user data with the new username
-                    //const userData = usersData[currentUser];
-                    //delete usersData[currentUser];  // Delete old username
-                    //usersData[newUsername] = userData;  // Save under new username
-
-                    // Save the updated users data
-                    //localStorage.setItem("growZoneUsers", JSON.stringify(usersData));
-                    //localStorage.setItem("growZoneCurrentUser", newUsername); // Update the current user
-
-                    //alert("Username updated successfully.");
-                    
-                    // Redirect to profilepage.html after saving
-                    //window.location.href = "profilepage.html";
-                //} else {
-                  //  alert("New username is the same as the current one.");
-                //}
-            //} else {
-              //  alert("Please enter a valid username.");
-            //}
-        //}
-
-        // Event listener for the save button
-        //document.getElementById("saveButton").addEventListener("click", saveUsername);
-
-        // Load the profile when the page is loaded
-        //window.onload = loadUserProfile;
-
-        /**
-        * Input: event - The DOM content loaded event (not used directly)
-        * Output: None, but updates the UI with the user's profile information 
-        * This function verifies user authentication, fetches profile data, and updates the UI elements
-        */
-
-        async function loadEditProfile(event){
-            try{
-                // check if the user is authenticated
-                const authResponse = await fetch('http://localhost:4002/authenticated',{
-                    credentials: 'include'
-                });
-
-                const authResult = await authResponse.text();
-
-                if(authResult !== "Authenticated"){
-                    alert("You are not logged in. Redirecting to the login page.");
-                    window.location.href = "userLogin.html";
-                    return;
-                }
-
-                const profileResponse = await fetch('http://localhost:4002/profile',{
-                    credentials: 'include'
-                });
-
-                if(!profileResponse.ok){
-                    throw new Error(`Failed to fetch profile data: ${profileResponse.status}`);
-                }
-
-                const userData = await profileResponse.json();
-
-                // display the user data
-                document.getElementById("usernamInput").value = userData.username;
-
-                // handle the plant data
-                const plantCount = userData.plants?.length || 0;
-                document.getElementById("displayPlants").textContent = plantCount;
-                document.getElementById("plant-badge").textContent = plantCount;
-
-                // set avatar to the first letter of the username
-                if(userData.username && userData.username.length > 0){
-                    document.getElementById("userAvatar").textContent = userData.username.charAt(0).toUpperCase();
-                }
-
-            } catch(error){
-                console.error("Error loading user profile:", error);
-                document.getElementById("usernameInput").value = "Error loading profile";
-                document.getElementById("displayPlants").textContent = "Error loading plants";
-                alert("Error loading the profile.");
-            }
-        }
-
-            /**
-            * Input: event - The click event from the save button (not used directly)
-            * Output: None, but sends update request to server and handles the response 
-            * This function validates the new username, sends it to the server, and handles success/failure
-            */
-
-        async function saveUsername(event){
-            const newUsername = document.getElementById("usernameInput").value.trim();
-
-            if(!newUsername){
-                alert("Please enter a username");
-                return;
-            }
-
-            try{
-                const response = await fetch('http://localhost:4002/update-profile',{
-                    method: 'POST',
-                    credentials: 'include',
-                    body: JSON.stringify({username: newUsername}),
-                    headers:{'Content-Type':'application/json'}
-                });
-
-                const result = await response.json();
-
-                if(response.ok){
-                    alert(result.message || "Profile updated successfully!");
-                    window.location.href = "profilepage.html";
-                }
-                else{
-                    alert(result.message || "Failed to update profile.");
-                }
-
-            }catch(error){
-                console.error("Error updating profile:", error);
-                alert("Error updating the profile.");
-            }
-
-        }
-
-        // event listener for the save button
-        document.getElementById("saveButton").addEventListener("click", saveUsername);
-
-        // load the profile when the page is loaded
-        window.addEventListener('DOMContentLoaded', loadEditProfile);
-
-    </script>
 </body>
+
 </html>
