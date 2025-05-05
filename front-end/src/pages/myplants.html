@@ -3,6 +3,7 @@ myplants.html
 This file displays the user's saved plants and provides functionality to add new plants.
 It includes a navigation sidebar, a display grid of saved plants, and a popup form 
 for adding new plants to the user's collection.
+-->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -19,7 +20,6 @@ for adding new plants to the user's collection.
             <h1>My Saved Plants</h1>
         </header>
         <div class="sidebar">
-            <a href = "userLogin.html">Login</a>
             <a href = "logoutPage.html">Logout</a>
             <a href = "profilepage.html">My Profile</a>
             <a href = "myplants.html">View Plants</a>
@@ -29,19 +29,6 @@ for adding new plants to the user's collection.
 
         <main>
             <div class="plants-container" id="plants-container"> 
-                <div class="plant">
-                    <h2>Name of plant 1</h2>
-                    <p>When linked with the backend, plants will be populated</p>
-                </div>
-                <div class="plant">
-                    <h2>Name of Plant 2</h2>
-                    <p>Description of plant 2.</p>
-                </div>
-                <div class="plant">
-                    <h2>Name of Plant 3</h2>
-                    <p>Description of plant 3.</p>
-                </div>
-
                 <div class="addPlantButton plant" id="addPlantButton">
                     <h2>Add a new plant here</h2>
                 </div>
@@ -63,9 +50,6 @@ for adding new plants to the user's collection.
         </div>
         <div class="popup-content">
             <form>
-                <label for="plantPic">Upload a photo:</label>
-                <input type="file" id="plantPic">
-                <br>
                 <label for="name">Type of plant:</label>
                 <input type="textbox" id="name">
                     <br>
@@ -115,16 +99,27 @@ for adding new plants to the user's collection.
         const name = document.getElementById("name").value;
         const desc = document.getElementById("desc").value;
         const date = document.getElementById("plantTime").value;
-
+        var canPost = false;
+        var today = new Date();
+        
+        
+        if(name == "" || desc == ""){
+            alert("Missing Field Requirements");
+        }else{
+            canPost = true;
+        }
         newPlant.classList.add("plant");
         newPlant.innerHTML = `
         <h2>${name}</h2>
             <p>${desc}</p>
             <p>Planted On:${date}</p>`;
 
-        grid.insertBefore(newPlant, addPlantButton);
-        document.querySelector(".addPlant-container form").reset();
-        closeSideBar();
+        if(canPost == true){
+            grid.insertBefore(newPlant, addPlantButton);
+            document.querySelector(".addPlant-container form").reset();
+            closeSideBar();
+        }
+        
 }
 
 
