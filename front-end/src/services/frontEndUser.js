@@ -90,81 +90,152 @@ async function handleRegistration(event) {
     }
 }
 
-// these functions are to switch between pages
-function redirectRegistration(event){
-    window.location.href = "userRegister.html";
-}
+async function loadProfile() {
+    try {
+        const response = await fetch('http://localhost:4002/profile', {
+            method: 'GET',
+            credentials: 'include'
+        })
+        const data = await response.json();
 
-function redirectLogin(event){
-    window.location.href = "userLogin.html";
-}
+        if (response.ok) {
+            document.getElementById('displayUsername').textContent = data.username || 'N/A';
+            document.getElementById('displayPlants').textContent = data.plantCount || 0;
+            document.getElementById('plant-badge').textContent = data.plantCount || 0;
 
-// function to handle user logout
-async function logoutUser(event){
-
-    event. preventDefault(); // prevent default form submission
-
-    let logoutConfirmed =  document.getElementById("logout-checkbox").checked;
-
-    // check if the user confirmed logout
-    if(logoutConfirmed){
-        try{
-            // call the api to log the user out
-            const response = await fetch('http://localhost:4002/logout',{
-                method: 'POST',
-                credentials: 'include',
-            });
-
-            const result = await response.text();
-            alert(result);
-
-            // redirect to the login page after logout
-            window.location.href = "userLogin.html";
-        }catch(error){
-            console.error("Error logging out:", error);
-            alert("Error logging out");
-        }
-    } 
-    else{
-        alert("Please confirm logout by checking the box.");
-    }
-}
-
-
-// the following functions are for the logout page
-window.onload = async function(){
-    try{
-        const currentPage = window.location.pathname.split("/").pop();
-
-        // for login page, check if the user is already authenticated
-        if(currentPage === "userLogin.html"){
-            await checkAuthentication();
-        }
-
-        // for other pages, check if the user is authenticated and redirect to the login page
-        else if (currentPage !== "userRegister.html"){
-            const response = await fetch('http://localhost:4002/authenticated',{
-                credentials: 'include'
-            });
-
-            const result = await response.text();
-
-            if(result !== "Authenticated"){
-                window.location.href = "userLogin.html"; // redirect to the login page if not authenticated
+            if (data.username && data.username.length > 0) {
+                document.getElementById('userAvatar').textContent = data.username.charAt(0).toUpperCase();
             }
+        } else {
+            alert(data.message || 'Unable to load profile.');
+            window.location.href = 'userLogin.html'; // kick back to login
         }
-    }
-    catch(error){
-        console.error("Authentication check failed:",error);
-        window.location.href = "userLogin.html"; // redirect to the login page if an error occurs
+    } catch (err) {
+        console.error('Error loading profile:', err);
+        alert('Error loading profile.');
+        window.location.href = 'userLogin.html'; // redirect on serious error
     }
 }
 
+async function loadEditProfile(event) {
+    try {
+        // check if the user is authenticated
+        const authResponse = await fetch('http://localhost:4002/authenticated', {
+            credentials: 'include'
+        });
 
-// the following funcitons are for the profile page
+        const authResult = await authResponse.text();
 
+        const profileResponse = await fetch('http://localhost:4002/profile', {
+            credentials: 'include'
+        });
 
-// the following funcitons are for the edit profile page
+        if (!profileResponse.ok) {
+            throw new Error(`Failed to fetch profile data: ${profileResponse.status}`);
+        }
 
+        const userData = await profileResponse.json();
 
-// the following functions are for the my plants page
+        // display the user data
+        document.getElementById("usernameInput").value = userData.username;
+
+        // handle the plant data
+        const plantCount = userData.plants?.length || 0;
+        document.getElementById("displayPlants").textContent = plantCount;
+        document.getElementById("plant-badge").textContent = plantCount;
+
+        // set avatar to the first letter of the username
+        if (userData.username && userData.username.length > 0) {
+            document.getElementById("userAvatar").textContent = userData.username.charAt(0).toUpperCase();
+        }
+
+    } catch (error) {
+        console.error("Error loading user profile:", error);
+        document.getElementById("usernameInput").value = "Error loading profile";
+        document.getElementById("displayPlants").textContent = "Error loading plants";
+        alert("Error loading the profile.");
+    }
+}
+
+async function saveUsername(event) {
+    let newUsername;
+
+    try {
+        newUsername = document.getElementById("usernameInput").value.trim();
+
+        if (!newUsername) {
+            alert("Please enter a username");
+            return;
+        }
+    } catch (error) {
+        console.error("Error getting username input:", error.message);
+        console.error("Stack trace:", error.stack);
+        alert("Failed to read username input.");
+        return;
+    }
+
+    let response;
+    try {
+        response = await fetch('http://localhost:4002/update-profile', {
+            method: 'POST',
+            credentials: 'include',
+            body: JSON.stringify({ username: newUsername }),
+            headers: { 'Content-Type': 'application/json' }
+        });
+    } catch (error) {
+        console.error("Error during fetch:", error.message);
+        console.error("Stack trace:", error.stack);
+        alert("Could not reach the server.");
+        return;
+    }
+    
+    let result;
+    try {
+        result = await response.json();
+    } catch (error) {
+        console.error("Error parsing JSON:", error.message);
+        console.error("Stack trace:", error.stack);
+        alert("Server gave a bad response.");
+        return;
+    }
+
+    try {
+        if (response.ok) {
+            alert(result.message + " Profile updated successfully!");
+            window.location.href = "profilepage.html";
+        } else {
+            alert(result.message + " Failed to update profile.");
+        }
+    } catch (error) {
+        console.error("Error handling response:", error.message);
+        console.error("Stack trace:", error.stack);
+        alert("Something went wrong after getting a response.");
+    }
+}
+
+function redirectLogin(event) {
+    event.preventDefault(); // Prevent default link behavior
+    window.location.href = "userLogin.html"; // Redirect to login page
+}
+
+function redirectRegistration(event) {
+    event.preventDefault(); // Prevent default link behavior
+    window.location.href = "userRegister.html"; // Redirect to registration page
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    // If we're on the edit profile page
+    if (document.getElementById("usernameInput")) {
+        loadEditProfile();
+
+        const saveButton = document.getElementById("saveButton");
+        if (saveButton) {
+            saveButton.addEventListener("click", saveUsername);
+        }
+    }
+
+    // If we have the displayUsername element (profile page)
+    if (document.getElementById("displayUsername")) {
+        loadProfile();
+    }
+});
