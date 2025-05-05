@@ -1,3 +1,9 @@
+path[data-set="true"] {
+    stroke: #f1f8e9;
+    fill: #555 !important; /* Replace with your preferred darker color */
+    transition: fill .4s ease;
+}
+
 path {
     stroke: #f1f8e9;
     fill: #2e7d32 !important;
@@ -92,10 +98,12 @@ path:hover {
     color: white;
     text-decoration: none;
     display: block;
-    margin: 10px 0;
+    margin: 12px 0;
+    font-size: 1rem;
+    transition: all 0.3s ease;
 }
 
 .sidebarLeft a:hover {
     background-color: #575757;
-    padding-left: 10px;
+    padding-left: 12px;
 }
