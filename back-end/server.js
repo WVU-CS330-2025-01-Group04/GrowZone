@@ -75,16 +75,6 @@ app.get('/api/posts', async (req, res) => {
     res.status(500).json({ message: 'Failed to load posts' });
   }
 });
-//test for backend db connectivity 
-app.get('/test-db', async (req, res) => {
-  try {
-    const [rows] = await pool.query('SELECT 1 + 1 AS result');
-    res.json({ success: true, result: rows[0].result });
-  } catch (err) {
-    console.error('Database test failed:', err);
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
 
 app.get('/api/saved-plants', async (req, res) => {
   if (!req.session.user) {
@@ -520,7 +510,7 @@ app._router.stack
   });
 
 // starting server: displaying URL in console
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${BACKEND_PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 })
