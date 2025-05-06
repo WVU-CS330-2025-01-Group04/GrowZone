@@ -2,7 +2,7 @@
 // if not, shows login and registration forms
 async function checkAuthentication() {
     try {
-        const response = await fetch('http://localhost:4002/authenticated', {
+        const response = await fetch('https://cs330-2025-01-group04-backend-gfesgxgxddedhyb4.eastus2-01.azurewebsites.net/login', {
             credentials: 'include'
         });
         const text = await response.text();
@@ -28,7 +28,7 @@ async function handleLogin(event) {
     }
 
     try {
-        const response = await fetch('http://localhost:4002/login', {
+        const response = await fetch('https://cs330-2025-01-group04-backend-gfesgxgxddedhyb4.eastus2-01.azurewebsites.net/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password }),
@@ -69,7 +69,7 @@ async function handleRegistration(event) {
     }
 
     try {
-        const response = await fetch('http://localhost:4002/register', {
+        const response = await fetch('https://cs330-2025-01-group04-backend-gfesgxgxddedhyb4.eastus2-01.azurewebsites.net/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username: newUsername, password: newPassword }),
@@ -92,7 +92,7 @@ async function handleRegistration(event) {
 
 async function loadProfile() {
     try {
-        const response = await fetch('http://localhost:4002/profile', {
+        const response = await fetch('https://cs330-2025-01-group04-backend-gfesgxgxddedhyb4.eastus2-01.azurewebsites.net/profile', {
             method: 'GET',
             credentials: 'include'
         })
@@ -120,13 +120,13 @@ async function loadProfile() {
 async function loadEditProfile(event) {
     try {
         // check if the user is authenticated
-        const authResponse = await fetch('http://localhost:4002/authenticated', {
+        const authResponse = await fetch('https://cs330-2025-01-group04-backend-gfesgxgxddedhyb4.eastus2-01.azurewebsites.net/authenticated', {
             credentials: 'include'
         });
 
         const authResult = await authResponse.text();
 
-        const profileResponse = await fetch('http://localhost:4002/profile', {
+        const profileResponse = await fetch('https://cs330-2025-01-group04-backend-gfesgxgxddedhyb4.eastus2-01.azurewebsites.net/profile', {
             credentials: 'include'
         });
 
@@ -170,7 +170,7 @@ async function saveUsername(event) {
 
     let response;
     try {
-        response = await fetch('http://localhost:4002/update-profile', {
+        response = await fetch('https://cs330-2025-01-group04-backend-gfesgxgxddedhyb4.eastus2-01.azurewebsites.net/update-profile', {
             method: 'POST',
             credentials: 'include',
             body: JSON.stringify({ username: newUsername }),
