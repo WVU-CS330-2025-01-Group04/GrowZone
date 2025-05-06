@@ -22,7 +22,7 @@ app.use(express.json());
 }));*/
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'https://agreeable-pond-00427160f.6.azurestaticapps.net/',
   credentials: true
 }));
 
