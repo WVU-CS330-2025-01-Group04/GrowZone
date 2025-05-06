@@ -268,7 +268,8 @@
    
        if (selectedPlantName && selectedPlantName !== "--Select a plant--" && currentState) {
          try {
-           const response = await fetch(`/api/plant-info?name=${encodeURIComponent(selectedPlantName)}&state=${currentState}`);
+           const response = await fetch(`${API_URL}/plant-info?name=${encodeURIComponent(selectedPlantName)}&state=${currentState}`);
+
    
            if (!response.ok) throw new Error(`Server responded with ${response.status}`);
    
@@ -307,7 +308,7 @@
            const starBtn = document.getElementById("savePlantBtn");
    
            try {
-             const savedRes = await fetch('/api/saved-symbols');
+             const savedRes = await fetch('${API_URL}/saved-symbols');
              const savedData = await savedRes.json();
              const savedList = savedData.saved || [];
    
@@ -320,7 +321,7 @@
            // Save click handler
            starBtn.addEventListener('click', async () => {
              try {
-               const res = await fetch('/api/save-plant', {
+               const res = await fetch('${API_URL}/save-plant', {
                  method: 'POST',
                  headers: { 'Content-Type': 'application/json' },
                  body: JSON.stringify({ symbol: currentPlantSymbol })
