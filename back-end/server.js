@@ -75,6 +75,16 @@ app.get('/api/posts', async (req, res) => {
     res.status(500).json({ message: 'Failed to load posts' });
   }
 });
+//test for backend db connectivity 
+app.get('/test-db', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT 1 + 1 AS result');
+    res.json({ success: true, result: rows[0].result });
+  } catch (err) {
+    console.error('Database test failed:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
 
 app.get('/api/saved-plants', async (req, res) => {
   if (!req.session.user) {
