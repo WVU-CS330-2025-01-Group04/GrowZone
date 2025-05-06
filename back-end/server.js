@@ -16,8 +16,13 @@ const __dirname = path.dirname(__filename);  // directory of current file
 const app = express();
 app.use(express.json());
 
-app.use(cors({
+/**app.use(cors({
   origin: 'https://growzone.azurestaticapps.net/',
+  credentials: true
+}));*/
+
+app.use(cors({
+  origin: 'http://localhost:3000',
   credentials: true
 }));
 
@@ -510,7 +515,7 @@ app._router.stack
   });
 
 // starting server: displaying URL in console
-const port = process.env.PORT || 4002;
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+const BACKEND_PORT = process.env.BACKEND_PORT;
+app.listen(BACKEND_PORT, () => {
+  console.log(`Server is running on port ${BACKEND_PORT}`);
+})
