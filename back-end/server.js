@@ -16,13 +16,8 @@ const __dirname = path.dirname(__filename);  // directory of current file
 const app = express();
 app.use(express.json());
 
-/**app.use(cors({
-  origin: 'https://growzone.azurestaticapps.net/',
-  credentials: true
-}));*/
-
 app.use(cors({
-  origin: 'https://agreeable-pond-00427160f.6.azurestaticapps.net/',
+  origin: 'https://agreeable-pond-00427160f.6.azurestaticapps.net',
   credentials: true
 }));
 
