@@ -24,7 +24,7 @@ jobs:
 
 
       - name: Install dependencies
-        working-directory: backend
+        working-directory: back-end
         run: npm ci
 
 
@@ -34,4 +34,4 @@ jobs:
         with:
           app-name: CS330-2025-01-Group04-backend   # <— replace with your App Service name
           publish-profile: ${{ secrets.APP_SERVICE_PUBLISH_PROFILE }}
-          package: backend
+          package: back-end
