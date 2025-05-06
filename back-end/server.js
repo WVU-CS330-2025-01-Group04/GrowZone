@@ -23,13 +23,9 @@ app.use(cors({
 
 // express sessions to track user sessions
 app.use(expressSession({
-  secret: 'your-secret-key',
+  secret: 'your-secret-key',  // need to change to something more secure
   resave: false,
-  saveUninitialized: false, // recommended
-  cookie: {
-    secure: true,            // ensure it's HTTPS-only
-    sameSite: 'none'         // allow cross-origin cookies
-  }
+  saveUninitialized: true
 }));
 
 // express static middleware to serve frontend files
@@ -514,7 +510,7 @@ app._router.stack
   });
 
 // starting server: displaying URL in console
-const BACKEND_PORT = process.env.BACKEND_PORT;
-app.listen(BACKEND_PORT, () => {
+const PORT = process.env.PORT;
+app.listen(PORT, () => {
   console.log(`Server is running on port ${BACKEND_PORT}`);
 })
