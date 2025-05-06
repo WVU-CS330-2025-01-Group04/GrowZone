@@ -3,12 +3,18 @@ import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { dirname }       from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const caPath = path.join(__dirname, 'DigiCertGlobalRootCA.crt.pem');
+
 // Load Azure's root certificate
-const caCert = fs.readFileSync(path.join(__dirname, 'DigiCertGlobalRootCA.crt.pem'));
+const caCert = fs.readFileSync(caPath);
+
+console.log('Loaded CA cert from:', caPath);
+console.log('Connecting to', `${process.env.DB_HOST}:${process.env.DB_PORT}`);
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
