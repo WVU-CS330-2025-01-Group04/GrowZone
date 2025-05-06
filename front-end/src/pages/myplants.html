@@ -7,122 +7,104 @@ for adding new plants to the user's collection.
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <link rel="stylesheet" href="myplants.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Plants</title>
-    
+
 </head>
+
 <body>
     <div class="page-container">
         <header>
             <h1>My Saved Plants</h1>
         </header>
         <div class="sidebar">
-            <a href = "logoutPage.html">Logout</a>
-            <a href = "profilepage.html">My Profile</a>
-            <a href = "myplants.html">View Plants</a>
-            <a href = "plantMap.html">View Map</a>
-            <a href = "AboutUs.html">About Us</a>
+            <a href="logoutPage.html">Logout</a>
+            <a href="profilepage.html">My Profile</a>
+            <a href="myplants.html">View Plants</a>
+            <a href="plantMap.html">View Map</a>
+            <a href="AboutUs.html">About Us</a>
+            <a href="posts.html">Posts</a>
         </div>
 
         <main>
-            <div class="plants-container" id="plants-container"> 
+            <div class="plants-container" id="plants-container">
                 <div class="addPlantButton plant" id="addPlantButton">
-                    <h2>Add a new plant here</h2>
+                    <h2></h2>
                 </div>
-                
             </div>
         </main>
 
 
-<!--Add plant popup-->
-<div class="addPlant-container">
-    <div class="addPlant-popup" id="addPlant-popup">
-    
-        <div class="close-popup"> 
-            <button class="close-btn" onclick="closeSideBar()">X</button>
-        </div>
-        <div class="popup-header">
-            <h2>Add a new plant <br>to your collection</h2>
-            
-        </div>
-        <div class="popup-content">
-            <form>
-                <label for="name">Type of plant:</label>
-                <input type="textbox" id="name">
-                    <br>
-                <label for="desc">Description:</label>
-                <input type="textbox" id="desc">
-                    <br>
-                <label for="plantTime">When it was planted:</label>
-                <input type="date" id="plantTime">
-                    <br>
-                    <div class="btn-container">
-                        <button type="button" onclick="addPlant()">Submit</button>
-                    </div>
-                </form>
+        <!--Add plant popup-->
+        <div class="addPlant-container">
+            <div class="addPlant-popup" id="addPlant-popup">
+
+                <div class="close-popup">
+                    <button class="close-btn" onclick="closeSideBar()">X</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
     <script>
-    /* When add new plant btn is clicked it blurs the screen and shows the form */
-     document.getElementById("addPlantButton").addEventListener("click", openAddPlantPopup);
-     function openAddPlantPopup(){
-        document.getElementById("addPlant-popup").style.display = "block";
-        document.getElementById("plants-container").style.filter = "blur(5px)";
-     }  
-/**
-* Closes the add plant popup form and removes the blur effect
-* @input - None 
-@output - Hides the popup form and removes blur effect fron the background
-*/
-        
-    /* Close sidebar */
-    function closeSideBar() {
-        document.getElementById("addPlant-popup").style.display = "none";
-        document.getElementById("plants-container").style.filter = "none";
-    }
+        /* When add new plant btn is clicked it blurs the screen and shows the form */
+        document.getElementById("addPlantButton").addEventListener("click", openAddPlantPopup);
+        function openAddPlantPopup() {
+            document.getElementById("addPlant-popup").style.display = "block";
+            document.getElementById("plants-container").style.filter = "blur(5px)";
+        }
+        /**
+        * Closes the add plant popup form and removes the blur effect
+        * @input - None 
+        @output - Hides the popup form and removes blur effect fron the background
+        */
+
+        /* Close sidebar */
+        function closeSideBar() {
+            document.getElementById("addPlant-popup").style.display = "none";
+            document.getElementById("plants-container").style.filter = "none";
+        }
         /**
         * Creates a new plant entry from form data and adds it to the plants container 
         * @input - None (reads values fron form fields)
         * @output - Creates and inserts a new plant element in the DOM 
         */
 
-    /* Adds new post by getting the stuff from the form */
-    function addPlant() {
-        const grid = document.getElementById("plants-container");
-        const newPlant = document.createElement("plant");
-        const name = document.getElementById("name").value;
-        const desc = document.getElementById("desc").value;
-        const date = document.getElementById("plantTime").value;
-        var canPost = false;
-        var today = new Date();
-        
-        
-        if(name == "" || desc == ""){
-            alert("Missing Field Requirements");
-        }else{
-            canPost = true;
+        function renderPlantCard(data) {
+            const container = document.getElementById("plants-container");
+            const box = document.createElement("div");
+            box.classList.add("plant");
+
+            box.innerHTML = `
+    <div style="margin-bottom: 15px;"><strong>Scientific Name:</strong> <em>${data.scientific_name || 'Not found'}</em></div>
+    <div style="margin-bottom: 15px;"><strong>Symbol:</strong> ${data.symbol || 'N/A'}</div>
+    <div style="margin-bottom: 15px;"><strong>Group:</strong> ${data.group || 'Not found'}</div>
+    <div style="margin-bottom: 15px;"><strong>Duration:</strong> ${data.duration || 'Not found'}</div>
+    <div style="margin-bottom: 15px;"><strong>Growth Habit:</strong> ${data.growth_habit || 'Not found'}</div>
+    <div style="margin-bottom: 15px;"><strong>Native Status:</strong> ${data.native_status || 'Not found'}</div>
+    <div style="margin-top: 20px;">
+      <a href="${data.url}" target="_blank" style="color: #4CAF50; text-decoration: none;">
+        View Full Profile →
+      </a>
+    </div>
+  `;
+
+            container.insertBefore(box, document.getElementById("addPlantButton"));
         }
-        newPlant.classList.add("plant");
-        newPlant.innerHTML = `
-        <h2>${name}</h2>
-            <p>${desc}</p>
-            <p>Planted On:${date}</p>`;
 
-        if(canPost == true){
-            grid.insertBefore(newPlant, addPlantButton);
-            document.querySelector(".addPlant-container form").reset();
-            closeSideBar();
-        }
-        
-}
+        document.addEventListener("DOMContentLoaded", async () => {
+            const res = await fetch("/api/saved-plants");
+            const data = await res.json();
 
-
+            for (const plant of data) {
+                renderPlantCard(plant); // Works for myplants
+            }
+        });
     </script>
-    </body>
+</body>
+
 </html>
