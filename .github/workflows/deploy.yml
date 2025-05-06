@@ -4,7 +4,7 @@ name: Deploy Backend to Azure App Service
 on:
   push:
     branches:
-      - main
+      - demo2
   workflow_dispatch:
 
 
@@ -32,6 +32,6 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: CS330-2025-01-Group04-backend # <— replace with your App Service name
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: back-end
+          app-name: CS330-2025-01-Group04-backend   # <— replace with your App Service name
+          publish-profile: ${{ secrets.APP_SERVICE_PUBLISH_PROFILE }}
+          package: backend
