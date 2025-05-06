@@ -26,7 +26,7 @@ jobs:
       # Step 3: Install frontend dependencies
       - name: Install dependencies
         run: npm install
-        working-directory: frontend   # <-- make sure this matches your folder
+        working-directory: front-end   # <-- make sure this matches your folder
 
       # Step 4: Build the React app
       - name: Build the React app
