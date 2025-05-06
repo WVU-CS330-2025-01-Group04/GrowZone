@@ -8,7 +8,8 @@ import { dirname }       from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const caPath = path.join(__dirname, 'DigiCertGlobalRootCA.crt.pem');
+
+const caPath = path.join(dirname, 'config', 'DigiCertGlobalRootCA.crt.pem');
 
 // Load Azure's root certificate
 const caCert = fs.readFileSync(caPath);
