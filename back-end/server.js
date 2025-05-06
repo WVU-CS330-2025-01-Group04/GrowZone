@@ -1,11 +1,13 @@
-
 import express from 'express';
 import bcrypt from 'bcryptjs';
+import multer from 'multer';
 import expressSession from 'express-session';
 import puppeteer from 'puppeteer';
 import pool from './db.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs';
+if (!fs.existsSync('uploads')) fs.mkdirSync('uploads');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);  // directory of current file
@@ -23,6 +25,166 @@ app.use(expressSession({
 // express static middleware to serve frontend files
 const frontendPath = path.join(__dirname, '..', 'frontend');
 app.use(express.static(frontendPath));
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, 'uploads'));
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    cb(null, Date.now() + ext);
+  }
+});
+const upload = multer({ storage });
+
+// Serve uploads statically
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Post creation route
+app.post('/api/create-post', upload.single('image'), async (req, res) => {
+  if (!req.session.user) return res.status(401).json({ message: 'Not authenticated' });
+
+  const { title, description } = req.body;
+  const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+
+  try {
+    await pool.query(
+      'INSERT INTO posts (post_title, username, description, image_path) VALUES (?, ?, ?, ?)',
+      [title, req.session.user.username, description, imagePath]
+    );
+    res.status(201).json({ message: 'Post created successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Database error' });
+  }
+});
+
+// Get all posts
+app.get('/api/posts', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT * FROM posts ORDER BY created_at DESC');
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Failed to load posts' });
+  }
+});
+
+app.get('/api/saved-plants', async (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ message: 'Not authenticated' });
+  }
+
+  try {
+    const [rows] = await pool.query(
+      'SELECT Saved_Plants FROM users WHERE id = ?',
+      [req.session.user.id]
+    );
+
+    const saved = rows[0]?.Saved_Plants || '';
+    const symbols = saved.split(',').map(s => s.trim()).filter(Boolean);
+    if (symbols.length === 0) return res.json([]);
+
+    const browser = await puppeteer.launch({
+      headless: 'new',
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
+
+    const page = await browser.newPage();
+    const results = [];
+
+    for (const symbol of symbols) {
+      const url = `https://plants.usda.gov/plant-profile/${symbol}`;
+      await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
+
+      await page.waitForSelector('h1', { timeout: 10000 }).catch(() => { });
+      await page.waitForSelector('table.usa-table', { timeout: 10000 }).catch(() => { });
+
+      const plantData = await page.evaluate((symbol) => {
+        const getText = (selector) => {
+          const el = document.querySelector(selector);
+          return el ? el.textContent.trim() : 'Not found';
+        };
+
+        const rows = document.querySelectorAll('table.usa-table tr');
+        const plantInfo = {};
+        rows.forEach(row => {
+          const header = row.querySelector('th h3');
+          const td = row.querySelector('td');
+          if (header && td) {
+            plantInfo[header.textContent.trim()] = td.textContent.trim();
+          }
+        });
+
+        let scientificName = '';
+        const h1 = document.querySelector('h1');
+        if (h1) {
+          const i = h1.querySelector('i');
+          scientificName = i ? i.textContent.trim() : h1.textContent.trim();
+        }
+
+        const h2 = document.querySelector('h2');
+        const commonName = h2 ? h2.textContent.trim() : 'Unknown';
+
+        return {
+          symbol,
+          scientific_name: scientificName,
+          common_name: commonName,
+          group: plantInfo['Group'] || 'Not found',
+          duration: plantInfo['Duration'] || 'Not found',
+          growth_habit: plantInfo['Growth Habit'] || plantInfo['Growth Habits'] || 'Not found',
+          native_status: plantInfo['Native Status'] || 'Not found',
+          url: `https://plants.usda.gov/plant-profile/${symbol}`
+        };
+      }, symbol);
+
+      results.push(plantData);
+    }
+
+    await browser.close();
+    res.json(results);
+  } catch (err) {
+    console.error("Failed to fetch saved plant data:", err);
+    res.status(500).json({ message: 'Internal error' });
+  }
+});
+
+app.post('/api/save-plant', async (req, res) => {
+  const { symbol } = req.body;
+
+  if (!req.session.user) {
+    return res.status(401).json({ message: 'User not logged in' });
+  }
+
+  if (!symbol) {
+    return res.status(400).json({ message: 'Missing plant symbol' });
+  }
+
+  try {
+    const userId = req.session.user.id;
+
+    // Get current saved list
+    const [rows] = await pool.query('SELECT Saved_Plants FROM users WHERE id = ?', [userId]);
+    if (rows.length === 0) return res.status(404).json({ message: 'User not found' });
+
+    const saved = rows[0].Saved_Plants;
+    let savedList = [];
+
+    if (saved) {
+      savedList = saved.split(',').map(s => s.trim()).filter(Boolean);
+    }
+
+    if (!savedList.includes(symbol)) {
+      savedList.push(symbol);
+      await pool.query('UPDATE users SET Saved_Plants = ? WHERE id = ?', [savedList.join(','), userId]);
+    }
+
+    res.json({ message: 'Plant saved!', saved: savedList });
+  } catch (err) {
+    console.error('Save plant error:', err);
+    res.status(500).json({ message: 'Failed to save plant' });
+  }
+});
 
 app.get('/api/plant-info', async (req, res) => {
   const { name, state } = req.query;
@@ -53,22 +215,22 @@ app.get('/api/plant-info', async (req, res) => {
     const url = `https://plants.usda.gov/plant-profile/${symbol}`;
 
     // Launch browser
-    browser = await puppeteer.launch({ 
+    browser = await puppeteer.launch({
       headless: "new",
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
-    
+
     const page = await browser.newPage();
-    
+
     // Set user agent to mimic a real browser
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
-    
+
     // Navigate to the page and wait for content to load
     await page.goto(url, { waitUntil: 'networkidle0', timeout: 30000 });
-    
+
     // Wait for specific elements to ensure page is loaded
-    await page.waitForSelector('h1', { timeout: 10000 }).catch(() => {});
-    await page.waitForSelector('table.usa-table', { timeout: 10000 }).catch(() => {});
+    await page.waitForSelector('h1', { timeout: 10000 }).catch(() => { });
+    await page.waitForSelector('table.usa-table', { timeout: 10000 }).catch(() => { });
 
     // Extract the data
     const plantData = await page.evaluate(() => {
@@ -97,18 +259,18 @@ app.get('/api/plant-info', async (req, res) => {
       // Parse general information table
       const plantInfo = {};
       const rows = document.querySelectorAll('table.usa-table tr');
-      
+
       rows.forEach(row => {
         const header = row.querySelector('th h3');
         if (header) {
           const headerText = header.textContent.trim();
           const td = row.querySelector('td');
-          
+
           if (td) {
             // Handle multiple values (like Growth Habits)
             const spans = td.querySelectorAll('span');
             let value = '';
-            
+
             if (spans.length > 0) {
               value = Array.from(spans)
                 .map(span => span.textContent.trim())
@@ -117,7 +279,7 @@ app.get('/api/plant-info', async (req, res) => {
             } else {
               value = td.textContent.trim();
             }
-            
+
             plantInfo[headerText] = value;
           }
         }
@@ -273,17 +435,25 @@ app.get('/profile', async (req, res) => {
   }
 
   try {
-    const [rows] = await pool.query('SELECT username FROM users WHERE id = ?', [req.session.user.id]);
+    const [rows] = await pool.query(
+      'SELECT username, Saved_Plants FROM users WHERE id = ?',
+      [req.session.user.id]
+    );
+
     if (rows.length === 0) {
       return res.status(404).json({ message: 'User not found' });
     }
 
     const user = rows[0];
+    const savedList = user.Saved_Plants
+      ? user.Saved_Plants.split(',').map(s => s.trim()).filter(Boolean)
+      : [];
 
     res.json({
       username: user.username,
-      plantCount: 0
+      plantCount: savedList.length
     });
+
   } catch (error) {
     console.error('Error fetching profile:', error);
     res.status(500).json({ message: 'Server error' });
