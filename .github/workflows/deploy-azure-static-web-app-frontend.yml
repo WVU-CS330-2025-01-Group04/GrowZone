@@ -31,7 +31,7 @@ jobs:
       # Step 4: Build the React app
       - name: Build the React app
         run: npm run build
-        working-directory: frontend
+        working-directory: front-end
 
       # Step 5: Deploy to Azure Static Web Apps
       - name: Deploy to Azure Static Web Apps
