@@ -4,7 +4,7 @@ name: Deploy Backend to Azure App Service
 on:
   push:
     branches:
-      - demo2
+      - main
   workflow_dispatch:
 
 
