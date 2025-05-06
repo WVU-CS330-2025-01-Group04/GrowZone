@@ -2,6 +2,7 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import multer from 'multer';
 import expressSession from 'express-session';
+import cors from 'cors';
 import puppeteer from 'puppeteer';
 import pool from './db.js';
 import path from 'path';
@@ -14,6 +15,11 @@ const __dirname = path.dirname(__filename);  // directory of current file
 
 const app = express();
 app.use(express.json());
+
+app.use(cors({
+  origin: 'https://growzone.azurestaticapps.net/',
+  credentials: true
+}));
 
 // express sessions to track user sessions
 app.use(expressSession({
@@ -504,6 +510,7 @@ app._router.stack
   });
 
 // starting server: displaying URL in console
-app.listen(4002, () => {
-  console.log('Server is running on http://localhost:4002/login');
+const port = process.env.PORT || 4002;
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
