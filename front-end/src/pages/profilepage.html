@@ -15,6 +15,7 @@
         <a href="myplants.html">View Plants</a>
         <a href="plantMap.html">View Map</a>
         <a href="AboutUs.html">About Us</a>
+        <a href="posts.html">Posts</a>
     </div>
 
     <div class="main-content">
@@ -48,7 +49,6 @@
                 </p>
                 <p>
                     <span class="profile-label">Plants:</span>
-                    <span id="displayPlants">Loading...</span>
                     <span class="plant-badge" id="plant-badge">0</span>
                 </p>
             </div>
@@ -65,7 +65,6 @@
 
                 if (response.ok) {
                     document.getElementById('displayUsername').textContent = data.username || 'N/A';
-                    document.getElementById('displayPlants').textContent = data.plantCount || 0;
                     document.getElementById('plant-badge').textContent = data.plantCount || 0;
 
                     if (data.username && data.username.length > 0) {
