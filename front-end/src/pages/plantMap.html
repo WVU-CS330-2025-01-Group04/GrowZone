@@ -12,11 +12,13 @@
 
 <body>
    <div class="sidebarLeft">
+      <a href="userLogin.html">Login</a>
       <a href="logoutPage.html">Logout</a>
       <a href="profilepage.html">My Profile</a>
       <a href="myplants.html">View Plants</a>
       <a href="plantMap.html">View Map</a>
       <a href="AboutUs.html">About Us</a>
+      <a href="posts.html">Posts</a>
    </div>
 
    <!--Literally every state-->
@@ -214,153 +216,177 @@
       </div>
   </div>
 
-   <script>
-      // Wait for DOM to be fully loaded
-      document.addEventListener('DOMContentLoaded', function () {
-         var tooltip = document.getElementById('detailsBox');
-         var currentState = ''; // Store the current state for plant info queries
-
-         function handleClick(e) {
-            const pathElement = e.currentTarget;
-            var stateName = pathElement.dataset.name;
-            var stateId = pathElement.id;
-
-            if (stateName && stateId) {
-               currentState = stateId.toLowerCase(); // Store the current state
-               openSideBar(stateName);
-
-               // Fetch plant names from backend and populate dropdown
-               fetch(`/api/plant-search?q=&state=${stateId.toLowerCase()}`)
-                  .then(res => {
-                     if (!res.ok) throw new Error(`Server responded with ${res.status}`);
-                     return res.json();
-                  })
-                  .then(data => {
-                     const dropdown = document.getElementById("commonNamesDropdown");
-                     dropdown.innerHTML = '<option>--Select a plant--</option>';
-
-                     if (!data.length) {
-                        const option = document.createElement("option");
-                        option.textContent = "(No plants found)";
-                        option.disabled = true;
-                        dropdown.appendChild(option);
-                        return;
-                     }
-
-                     data.forEach(item => {
-                        const option = document.createElement("option");
-                        option.value = item.value;
-                        option.textContent = item.label;
-                        dropdown.appendChild(option);
-                     });
-                  })
-                  .catch(err => {
-                     console.error("Error fetching plant data:", err);
-                  });
-            }
-         }
-
-         // Function to display plant information
-         async function displayPlantInfo() {
-            const dropdown = document.getElementById("commonNamesDropdown");
-            const selectedPlantName = dropdown.value;
-
-            if (selectedPlantName && selectedPlantName !== "--Select a plant--" && currentState) {
-               try {
-                  // Call the plant-info endpoint with the common name and state
-                  const response = await fetch(`/api/plant-info?name=${encodeURIComponent(selectedPlantName)}&state=${currentState}`);
-
-                  if (!response.ok) {
-                     throw new Error(`Server responded with ${response.status}`);
-                  }
-
-                  const data = await response.json();
-
-                  const plantInfoBox = document.getElementById("plantInfoBox");
-                  const plantDetails = document.getElementById("plantDetails");
-
-                  plantInfoBox.style.display = "block";
-
-                  // Display the fetched data
-                  plantDetails.innerHTML = `
-                    <div style="margin-bottom: 15px;">
-                        <strong>Common Name:</strong> ${data.common_name || 'N/A'}
-                    </div>
-                    <div style="margin-bottom: 15px;">
-                        <strong>Scientific Name:</strong> <em>${data.scientific_name || 'N/A'}</em>
-                    </div>
-                    <div style="margin-bottom: 15px;">
-                        <strong>Symbol:</strong> ${data.symbol || 'N/A'}
-                    </div>
-                    <div style="margin-bottom: 15px;">
-                        <strong>Family:</strong> ${data.family || 'N/A'}
-                    </div>
-                    <div style="margin-bottom: 15px;">
-                        <strong>Growth Habit:</strong> ${data.growth_habit || 'N/A'}
-                    </div>
-                    <div style="margin-bottom: 15px;">
-                        <strong>Native Status:</strong> ${data.native_status || 'N/A'}
-                    </div>
-                    <div style="margin-top: 20px;">
-                        <a href="${data.url}" target="_blank" style="color: #4CAF50; text-decoration: none;">
-                            View Full USDA Profile →
-                        </a>
-                    </div>
-                `;
-               } catch (error) {
-                  console.error("Error fetching plant details:", error);
-                  const plantInfoBox = document.getElementById("plantInfoBox");
-                  const plantDetails = document.getElementById("plantDetails");
-
-                  plantInfoBox.style.display = "block";
-                  plantDetails.innerHTML = `
-                    <div style="color: #d9534f;">
-                        Error loading plant information. Please try again.
-                    </div>
-                `;
+  <script>
+   document.addEventListener('DOMContentLoaded', function () {
+     var tooltip = document.getElementById('detailsBox');
+     var currentState = '';
+     let currentPlantSymbol = ''; // track the current plant's symbol
+   
+     function handleClick(e) {
+       const pathElement = e.currentTarget;
+       var stateName = pathElement.dataset.name;
+       var stateId = pathElement.id;
+   
+       if (stateName && stateId) {
+         currentState = stateId.toLowerCase();
+         openSideBar(stateName);
+   
+         // Fetch plant names from backend
+         fetch(`/api/plant-search?q=&state=${stateId.toLowerCase()}`)
+           .then(res => {
+             if (!res.ok) throw new Error(`Server responded with ${res.status}`);
+             return res.json();
+           })
+           .then(data => {
+             const dropdown = document.getElementById("commonNamesDropdown");
+             dropdown.innerHTML = '<option>--Select a plant--</option>';
+   
+             if (!data.length) {
+               const option = document.createElement("option");
+               option.textContent = "(No plants found)";
+               option.disabled = true;
+               dropdown.appendChild(option);
+               return;
+             }
+   
+             data.forEach(item => {
+               const option = document.createElement("option");
+               option.value = item.value;
+               option.textContent = item.label;
+               dropdown.appendChild(option);
+             });
+           })
+           .catch(err => {
+             console.error("Error fetching plant data:", err);
+           });
+       }
+     }
+   
+     async function displayPlantInfo() {
+       const dropdown = document.getElementById("commonNamesDropdown");
+       const selectedPlantName = dropdown.value;
+   
+       if (selectedPlantName && selectedPlantName !== "--Select a plant--" && currentState) {
+         try {
+           const response = await fetch(`/api/plant-info?name=${encodeURIComponent(selectedPlantName)}&state=${currentState}`);
+   
+           if (!response.ok) throw new Error(`Server responded with ${response.status}`);
+   
+           const data = await response.json();
+           const plantInfoBox = document.getElementById("plantInfoBox");
+           const plantDetails = document.getElementById("plantDetails");
+   
+           currentPlantSymbol = data.symbol; // Track current symbol
+           plantInfoBox.style.display = "block";
+   
+           plantDetails.innerHTML = `
+             <button id="savePlantBtn" title="Save to My Plants">☆</button>
+             <div style="margin-bottom: 15px;">
+               <strong>Scientific Name:</strong> <em>${data.scientific_name || 'N/A'}</em>
+             </div>
+             <div style="margin-bottom: 15px;">
+               <strong>Symbol:</strong> ${data.symbol || 'N/A'}
+             </div>
+             <div style="margin-bottom: 15px;">
+               <strong>Family:</strong> ${data.family || 'N/A'}
+             </div>
+             <div style="margin-bottom: 15px;">
+               <strong>Growth Habit:</strong> ${data.growth_habit || 'N/A'}
+             </div>
+             <div style="margin-bottom: 15px;">
+               <strong>Native Status:</strong> ${data.native_status || 'N/A'}
+             </div>
+             <div style="margin-top: 20px;">
+               <a href="${data.url}" target="_blank" style="color: #4CAF50; text-decoration: none;">
+                 View Full USDA Profile →
+               </a>
+             </div>
+           `;
+   
+           // Handle star fill state
+           const starBtn = document.getElementById("savePlantBtn");
+   
+           try {
+             const savedRes = await fetch('/api/saved-symbols');
+             const savedData = await savedRes.json();
+             const savedList = savedData.saved || [];
+   
+             starBtn.textContent = savedList.includes(currentPlantSymbol) ? '★' : '☆';
+           } catch (err) {
+             console.error("Could not load saved symbols:", err);
+             starBtn.textContent = '☆';
+           }
+   
+           // Save click handler
+           starBtn.addEventListener('click', async () => {
+             try {
+               const res = await fetch('/api/save-plant', {
+                 method: 'POST',
+                 headers: { 'Content-Type': 'application/json' },
+                 body: JSON.stringify({ symbol: currentPlantSymbol })
+               });
+   
+               const result = await res.json();
+               if (result.saved.includes(currentPlantSymbol)) {
+                 starBtn.textContent = '★';
                }
-            } else {
-               document.getElementById("plantInfoBox").style.display = "none";
-            }
+             } catch (err) {
+               console.error("Failed to save plant:", err);
+             }
+           });
+   
+         } catch (error) {
+           console.error("Error fetching plant details:", error);
+           const plantInfoBox = document.getElementById("plantInfoBox");
+           const plantDetails = document.getElementById("plantDetails");
+           plantInfoBox.style.display = "block";
+           plantDetails.innerHTML = `
+             <div style="color: #d9534f;">
+               Error loading plant information. Please try again.
+             </div>
+           `;
          }
-
-         // Add click event listeners to all path elements
-         document.querySelectorAll('path').forEach(function (path) {
-            path.addEventListener('click', handleClick);
-         });
-
-         // Mouse move handler for tooltip
-         window.addEventListener('mousemove', function (e) {
-            if (e.target.tagName === 'path') {
-               const pathElement = e.target;
-               var stateName = pathElement.dataset.name;
-               if (stateName) {
-                  tooltip.style.opacity = 1;
-                  tooltip.innerText = stateName;
-                  tooltip.style.left = (e.clientX + 15) + 'px';
-                  tooltip.style.top = e.clientY + 'px';
-               } else {
-                  tooltip.style.opacity = 0;
-               }
-            } else {
-               tooltip.style.opacity = 0;
-            }
-         });
-
-         function openSideBar(stateName) {
-            document.getElementById("sideBar").classList.add("active");
-            document.getElementById("sideBar-Name").innerHTML = `<h2>${stateName}</h2>`;
+       } else {
+         document.getElementById("plantInfoBox").style.display = "none";
+       }
+     }
+   
+     // Tooltip movement
+     window.addEventListener('mousemove', function (e) {
+       if (e.target.tagName === 'path') {
+         const pathElement = e.target;
+         var stateName = pathElement.dataset.name;
+         if (stateName) {
+           tooltip.style.opacity = 1;
+           tooltip.innerText = stateName;
+           tooltip.style.left = (e.clientX + 15) + 'px';
+           tooltip.style.top = e.clientY + 'px';
+         } else {
+           tooltip.style.opacity = 0;
          }
-
-         function closeSideBar() {
-            document.getElementById("sideBar").classList.remove("active");
-         }
-
-         // Make functions available globally
-         window.openSideBar = openSideBar;
-         window.closeSideBar = closeSideBar;
-         window.displayPlantInfo = displayPlantInfo;
-      });
+       } else {
+         tooltip.style.opacity = 0;
+       }
+     });
+   
+     function openSideBar(stateName) {
+       document.getElementById("sideBar").classList.add("active");
+       document.getElementById("sideBar-Name").innerHTML = `<h2>${stateName}</h2>`;
+     }
+   
+     function closeSideBar() {
+       document.getElementById("sideBar").classList.remove("active");
+     }
+   
+     // Hook up event listeners
+     document.querySelectorAll('path').forEach(function (path) {
+       path.addEventListener('click', handleClick);
+     });
+   
+     window.openSideBar = openSideBar;
+     window.closeSideBar = closeSideBar;
+     window.displayPlantInfo = displayPlantInfo;
+   });
    </script>
 
 </body>
