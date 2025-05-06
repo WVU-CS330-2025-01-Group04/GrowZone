@@ -139,11 +139,6 @@ async function loadEditProfile(event) {
         // display the user data
         document.getElementById("usernameInput").value = userData.username;
 
-        // handle the plant data
-        const plantCount = userData.plants?.length || 0;
-        document.getElementById("displayPlants").textContent = plantCount;
-        document.getElementById("plant-badge").textContent = plantCount;
-
         // set avatar to the first letter of the username
         if (userData.username && userData.username.length > 0) {
             document.getElementById("userAvatar").textContent = userData.username.charAt(0).toUpperCase();
@@ -152,7 +147,6 @@ async function loadEditProfile(event) {
     } catch (error) {
         console.error("Error loading user profile:", error);
         document.getElementById("usernameInput").value = "Error loading profile";
-        document.getElementById("displayPlants").textContent = "Error loading plants";
         alert("Error loading the profile.");
     }
 }
