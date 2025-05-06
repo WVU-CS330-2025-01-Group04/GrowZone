@@ -13,7 +13,7 @@ for adding new plants to the user's collection.
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Plants</title>
-
+    <script src="config.js"></script>
 </head>
 
 <body>
@@ -97,7 +97,7 @@ for adding new plants to the user's collection.
         }
 
         document.addEventListener("DOMContentLoaded", async () => {
-            const res = await fetch("/api/saved-plants");
+            const res = await fetch(`${API_URL}/saved-plants`);
             const data = await res.json();
 
             for (const plant of data) {
