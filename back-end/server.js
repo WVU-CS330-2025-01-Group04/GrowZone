@@ -17,7 +17,7 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-  origin: 'https://agreeable-pond-00427160f.6.azurestaticapps.net',
+  origin: process.env.FRONTEND_URL,
   credentials: true
 }));
 
