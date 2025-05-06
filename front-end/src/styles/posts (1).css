@@ -1,0 +1,138 @@
+.sidebar {
+  width: 200px;
+  font-family: Arial, sans-serif;
+  background-color: #333;
+  color: white;
+  padding: 20px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.sidebar a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  margin: 12px 0;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.sidebar a:hover {
+  background-color: #575757;
+  padding-left: 12px;
+}
+
+/* Main content for posts page */
+.mainContent {
+  margin-left: 240px;
+  padding: 40px;
+  background-color: #f9f9f9;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  min-height: 100vh;
+}
+
+/* Form styling */
+.post-form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px;
+}
+
+.post-form h2 {
+  font-size: 2rem;
+  color: #2e7d32;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 0.3rem;
+}
+
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.form-group input[type="text"],
+.form-group textarea,
+.form-group input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.form-group button {
+  background-color: #2e7d32;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.form-group button:hover {
+  background-color: #256428;
+}
+
+/* Image preview */
+#preview {
+  margin-top: 10px;
+  max-width: 100%;
+  border-radius: 6px;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Post list section */
+.post-list {
+  margin-top: 20px;
+}
+
+.post-list h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 0.3rem;
+  color: #2e7d32;
+}
+
+/* Each post item */
+.post {
+  background-color: #ffffff;
+  padding: 20px;
+  border-left: 5px solid #2e7d32;
+  border-radius: 6px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.post h3 {
+  margin-top: 0;
+  color: #2e7d32;
+  font-size: 1.5rem;
+}
+
+.post p {
+  font-size: 1.1rem;
+  color: #333;
+  margin: 10px 0;
+}
+
+.post img {
+  max-width: 100%;
+  height: auto;
+  margin-top: 12px;
+  border-radius: 4px;
+}
