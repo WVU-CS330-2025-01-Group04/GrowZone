@@ -41,4 +41,4 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: upload
           app_location: front-end                  # <-- Source directory
-          output_location: build                  # <-- React build output folder
+          output_location: .                # <-- React build output folder
