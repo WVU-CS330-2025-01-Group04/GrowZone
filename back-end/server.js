@@ -23,9 +23,13 @@ app.use(cors({
 
 // express sessions to track user sessions
 app.use(expressSession({
-  secret: 'your-secret-key',  // need to change to something more secure
+  secret: 'your-secret-key',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: false, // recommended
+  cookie: {
+    secure: true,            // ensure it's HTTPS-only
+    sameSite: 'none'         // allow cross-origin cookies
+  }
 }));
 
 // express static middleware to serve frontend files
