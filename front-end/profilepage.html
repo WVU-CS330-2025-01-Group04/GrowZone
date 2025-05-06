@@ -58,7 +58,7 @@
     <script>
         async function loadProfile() {
             try {
-                const response = await fetch('http://localhost:4002/profile', {
+                const response = await fetch('${API_URL}/profile', {
                     method: 'GET',
                     credentials: 'include'
                 })
