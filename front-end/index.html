@@ -17,15 +17,15 @@
     <div id="loginContainer">
         <div class = "login">
         <h2>Login</h2>
-        <form onsubmit="handleLogin(event)" method = "post">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
+        <form id="loginForm" method="post">
+  <label for="username">Username:</label>
+  <input type="text" id="username" name="username" required>
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+  <label for="password">Password:</label>
+  <input type="password" id="password" name="password" required>
 
-            <button type="submit">Login</button>
-        </form>
+  <button type="submit">Login</button>
+</form>
         <div class = "switch-form">
         <p>Don't have an account? <a href="#" onclick="redirectRegistration(event)">Register here</a></p>
     </div>
