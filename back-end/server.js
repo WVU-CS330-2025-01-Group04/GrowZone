@@ -386,7 +386,7 @@ app.get('/', (req, res) => {
 
 // route to login
 app.get('/login', (req, res) => {
-  res.sendFile(path.join(frontendPath, 'userLogin.html'));
+  res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
 // route to registration
