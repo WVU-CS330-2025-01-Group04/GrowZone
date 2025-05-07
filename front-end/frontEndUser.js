@@ -331,4 +331,4 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-});
+
