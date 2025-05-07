@@ -1,3 +1,4 @@
+const API_URL = 'https://cs330-2025-01-group04-backend-gfesgxgxddedhyb4.eastus2-01.azurewebsites.net';
 // if user authenticated, redirects to plantMap.html
 // if not, shows login and registration forms
 async function checkAuthentication() {
@@ -108,7 +109,7 @@ async function loadProfile() {
             }
         } else {
             alert(data.message || 'Unable to load profile.');
-            window.location.href = 'userLogin.html'; // kick back to login
+            window.location.href = 'index.html'; // kick back to login
         }
     } catch (err) {
         console.error('Error loading profile:', err);
@@ -209,7 +210,7 @@ async function saveUsername(event) {
 
 function redirectLogin(event) {
     event.preventDefault(); // Prevent default link behavior
-    window.location.href = "userLogin.html"; // Redirect to login page
+    window.location.href = "index.html"; // Redirect to login page
 }
 
 function redirectRegistration(event) {
@@ -248,7 +249,7 @@ async function logoutUser(event) {
     
     try {
         // Make the server request to log out
-        const response = await fetch(`/logout`, {
+        const response = await fetch(`${API_URL}/logout`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include' // Include credentials to send cookies
@@ -258,7 +259,7 @@ async function logoutUser(event) {
         if (response.ok) {
             const data = await response.json();
             alert(data.message || "You have been successfully logged out.");
-            window.location.href = "userLogin.html"; // Redirect to login page
+            window.location.href = "index.html"; // Redirect to login page
         } else {
             const data = await response.json();
             alert(data.message || "Logout failed. Please try again."); 
@@ -274,18 +275,18 @@ async function logoutUser(event) {
 // When the page loads, check if the user is authenticated
 window.addEventListener('DOMContentLoaded', () => {
     // Check if the user is authenticated
-    fetch('/authenticated', {
+    fetch(`${API_URL}/authenticated`, {
         credentials: 'include'
     })
     .then(response => response.text())
     .then(text => {
         if (text !== "Authenticated") {
-            window.location.href = "userLogin.html"; // Redirect to login if not authenticated
+            window.location.href = "index.html"; // Redirect to login if not authenticated
         }
     })
     .catch(error => {
         console.error("Error checking authentication:", error);
-        window.location.href = "userLogin.html"; // Redirect on error
+        window.location.href = "index.html"; // Redirect on error
     });
     
     // Initialize logout button state
