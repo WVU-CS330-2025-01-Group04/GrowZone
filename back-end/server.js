@@ -415,6 +415,31 @@ app.post('/login', async (req, res) => {
   }
 });
 
+// logout post route: handles user logout by destroying the session
+app.post('/logout', (req, res) => {
+  // Check if user is logged in
+  if (!req.session.user) {
+    return res.status(401).json({ message: 'Not authenticated' });
+  }
+  
+  // Get the username for confirmation message
+  const username = req.session.user.username;
+  
+  // Destroy the session
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Session destruction error:', err);
+      return res.status(500).json({ message: 'Failed to log out' });
+    }
+    
+    // Clear the session cookie (express-session uses 'connect.sid' by default)
+    res.clearCookie('connect.sid');
+    
+    // Respond with success message
+    res.status(200).json({ message: `Logged out successfully. Goodbye, ${username}!` });
+  });
+});
+
 // register post route: handles user registration by checking if the user already exists and hashing the password before storing it in the database
 app.post('/register', async (req, res) => {
   const { username, password } = req.body;
