@@ -219,21 +219,49 @@ function redirectRegistration(event) {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-    // If we're on the edit profile page
-    if (document.getElementById("usernameInput")) {
-        loadEditProfile();
+  const loginForm = document.getElementById("loginForm");
+  if (loginForm) {
+    loginForm.addEventListener("submit", handleLogin);
+  }
 
-        const saveButton = document.getElementById("saveButton");
-        if (saveButton) {
-            saveButton.addEventListener("click", saveUsername);
-        }
+  if (document.getElementById("usernameInput")) {
+    loadEditProfile();
+
+    const saveButton = document.getElementById("saveButton");
+    if (saveButton) {
+      saveButton.addEventListener("click", saveUsername);
     }
+  }
 
-    // If we have the displayUsername element (profile page)
-    if (document.getElementById("displayUsername")) {
-        loadProfile();
-    }
+  if (document.getElementById("displayUsername")) {
+    loadProfile();
+  }
 
+  const logoutCheckbox = document.getElementById('logout-checkbox');
+  const logoutButton = document.querySelector('.logout-button');
+
+  if (logoutCheckbox && logoutButton) {
+    logoutButton.disabled = !logoutCheckbox.checked;
+
+    logoutCheckbox.addEventListener('change', () => {
+      logoutButton.disabled = !logoutCheckbox.checked;
+    });
+  }
+
+  fetch(`${API_URL}/authenticated`, {
+    credentials: 'include'
+  })
+    .then(response => response.text())
+    .then(text => {
+      if (text !== "Authenticated") {
+        window.location.href = "index.html";
+      }
+    })
+    .catch(error => {
+      console.error("Error checking authentication:", error);
+      window.location.href = "index.html";
+    });
+});
     // Handles the user logout process when the logout button is clicked
 async function logoutUser(event) {
     // Prevent the default form submission
