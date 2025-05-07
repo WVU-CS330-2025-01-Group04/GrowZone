@@ -232,4 +232,74 @@ window.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById("displayUsername")) {
         loadProfile();
     }
+
+    // Handles the user logout process when the logout button is clicked
+async function logoutUser(event) {
+    // Prevent the default form submission
+    event.preventDefault();
+    
+    // Check if the confirmation checkbox is checked
+    const logoutCheckbox = document.getElementById("logout-checkbox");
+    
+    if (!logoutCheckbox.checked) {
+        alert("Please confirm that you want to log out by checking the box.");
+        return false;
+    }
+    
+    try {
+        // Make the server request to log out
+        const response = await fetch('/logout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include' // Include credentials to send cookies
+        });
+        
+        // Handle response
+        if (response.ok) {
+            const data = await response.json();
+            alert(data.message || "You have been successfully logged out.");
+            window.location.href = "userLogin.html"; // Redirect to login page
+        } else {
+            const data = await response.json();
+            alert(data.message || "Logout failed. Please try again."); 
+        }
+    } catch (error) {
+        console.error("Logout error:", error);
+        alert("An error occurred during logout.");
+    }
+    
+    return false; // Prevent default form submission
+}
+
+// When the page loads, check if the user is authenticated
+window.addEventListener('DOMContentLoaded', () => {
+    // Check if the user is authenticated
+    fetch('/authenticated', {
+        credentials: 'include'
+    })
+    .then(response => response.text())
+    .then(text => {
+        if (text !== "Authenticated") {
+            window.location.href = "userLogin.html"; // Redirect to login if not authenticated
+        }
+    })
+    .catch(error => {
+        console.error("Error checking authentication:", error);
+        window.location.href = "userLogin.html"; // Redirect on error
+    });
+    
+    // Initialize logout button state
+    const logoutCheckbox = document.getElementById('logout-checkbox');
+    const logoutButton = document.querySelector('.logout-button');
+    
+    if (logoutCheckbox && logoutButton) {
+        // Set initial button state
+        logoutButton.disabled = !logoutCheckbox.checked;
+        
+        // Add event listener for checkbox change
+        logoutCheckbox.addEventListener('change', () => {
+            logoutButton.disabled = !logoutCheckbox.checked;
+        });
+    }
+});
 });
