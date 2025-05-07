@@ -95,6 +95,7 @@ app.get('/api/saved-plants', async (req, res) => {
     if (symbols.length === 0) return res.json([]);
 
     const browser = await puppeteer.launch({
+      executablePath: '/usr/bin/google-chrome',  // You might need to adjust this later
       headless: 'new',
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
@@ -225,6 +226,7 @@ app.get('/api/plant-info', async (req, res) => {
 
     // Launch browser
     browser = await puppeteer.launch({
+      executablePath: '/usr/bin/google-chrome',  // Adjust if needed
       headless: "new",
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
