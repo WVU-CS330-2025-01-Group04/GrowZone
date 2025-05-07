@@ -232,7 +232,7 @@
          openSideBar(stateName);
    
          // Fetch plant names from backend
-         fetch(`/api/plant-search?q=&state=${stateId.toLowerCase()}`)
+         fetch(`${API_URL}/api/plant-search?q=&state=${stateId.toLowerCase()}`)
            .then(res => {
              if (!res.ok) throw new Error(`Server responded with ${res.status}`);
              return res.json();
@@ -308,7 +308,7 @@
            const starBtn = document.getElementById("savePlantBtn");
    
            try {
-             const savedRes = await fetch('${API_URL}/saved-symbols');
+             const savedRes = await fetch(`${API_URL}/saved-symbols`);
              const savedData = await savedRes.json();
              const savedList = savedData.saved || [];
    
@@ -321,7 +321,7 @@
            // Save click handler
            starBtn.addEventListener('click', async () => {
              try {
-               const res = await fetch('${API_URL}/save-plant', {
+               const res = await fetch(`${API_URL}/save-plant`, {
                  method: 'POST',
                  headers: { 'Content-Type': 'application/json' },
                  body: JSON.stringify({ symbol: currentPlantSymbol })
