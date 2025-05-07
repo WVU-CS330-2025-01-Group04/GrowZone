@@ -3,13 +3,12 @@ import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { dirname }       from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-
-const caPath = path.join(dirname, 'config', 'DigiCertGlobalRootCA.crt.pem');
+// Construct correct path to cert file
+const caPath = path.join(__dirname, 'DigiCertGlobalRootCA.crt.pem');
 
 // Load Azure's root certificate
 const caCert = fs.readFileSync(caPath);
@@ -28,17 +27,17 @@ const pool = mysql.createPool({
   queueLimit: 0,
   ssl: {
     ca: caCert,
-    rejectUnauthorized: true
-  }
+    rejectUnauthorized: true,
+  },
 });
 
 pool.getConnection()
   .then(conn => {
-    console.log('Successfully connected to MySQL');
+    console.log('✅ Successfully connected to MySQL');
     conn.release();
   })
   .catch(err => {
-    console.error('MySQL connection failed on startup:', err);
+    console.error('❌ MySQL connection failed on startup:', err);
   });
 
 export default pool;
