@@ -1,4 +1,4 @@
-const express = require('express');
+import express from 'express';
 import bcrypt from 'bcryptjs';
 import multer from 'multer';
 import expressSession from 'express-session';
