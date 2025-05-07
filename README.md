@@ -7,7 +7,7 @@
 ## Features:
 - **`User Authentication:`** Secure login, logout, and registration functionality.
 - **`Plant Search:`** Search for plants by common name, filtered by state.
-- **`Plant Information:`** Detailed information about plants, including the scientific name, family name,
+- **`Plant Information:`** Detailed information about plants, including the scientific name, family name, symbol, growth habitat and native status.
 - **`Save Plants:`** Save your favorite plants to your profile for easy access.
 - **`User Profiles:`** View and edit your profile information.
 - **`Community Posts:`** Create and view plant related posts.
@@ -44,14 +44,48 @@ The front-end of GrowZone provides an interface for users to explore plants, man
 ### Structure of the front-end folder
 ```
 front-end/
-├──
+├──.env
+├──AboutUs.css
+├──AboutUs.html
+├──config.js
+├──editProfile.css
+├──editProfile.html
+├──frontEndUser.js
+├──GrowZone SignIn png.jpg
+├──index.html
+├──logoutPage.css
+├──logoutPage.html
+├──myplants.css
+├──myplants.html
+├──plantMap.css
+├──plantMap.html
+├──posts.css
+├──posts.html
+├──profilepage.css
+├──profiepage.html
+├──us.svg
+├──userLogin.css
+├──userRegister.css
+├──userRegister.html
 ```
 ## `back-end` Folder
 The back-end of GrowZone powers the application with a RESTful API, database management, and integration with external plant data sources
 ### Structure of the back-end folder
 ```
 back-end/
-├──
+├──.vscode/
+|   └── settings.json
+├── .env
+├──.gitignore
+├──AzureMySQLRootCert.pem
+├──db.js
+├──DigiCertGlobalRootCA.crt.pem
+├──Dockerfile
+├──Local MySQLsession.sql
+├──package-lock.json
+├──package.json
+├──server.js
+├──USERTABLE.SQL.sql
 ```
 ## Key Principles and Design choices
 -
@@ -65,20 +99,4 @@ back-end/
 ## Acknowledgements
 - USDA Plants database for providing plant informaiton
 - Team members who helped to build this applicaiton (Group 4)
-
- this is what the "code" for the file structure looks like
-```
-backend/
-├── config/                # Configuration files, including database setup
-│   └── db.js              # Establishes connection to the database
-├── middleware/            # Middleware functions for validation, authentication, logging
-│   ├── authMiddleware.js  # Middleware to ensure user is authenticated
-│   └── validate.js        # Middleware for validating request data
-├── routes/                # API route definitions for different backend functionalities
-│   ├── auth.js            # Routes for user authentication
-│   └── stac.js            # Routes for data retrieval from external APIs
-├── get_temperature_data.py # Python script to retrieve NOAA temperature data
-├── index.js               # Main entry point for the Express server
-└── README.md              # Documentation for the backend folder
-```
 
