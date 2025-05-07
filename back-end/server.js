@@ -42,7 +42,10 @@ const storage = multer.diskStorage({
   }
 });
 const upload = multer({ storage });
-
+app.get('/test-db', async (req, res) => {
+  const [rows] = await pool.query('SELECT * FROM users LIMIT 1');
+  res.json(rows);
+});
 // Serve uploads statically
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
