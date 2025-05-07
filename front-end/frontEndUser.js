@@ -2,7 +2,7 @@
 // if not, shows login and registration forms
 async function checkAuthentication() {
     try {
-        const response = await fetch('${API_URL}/login', {
+        const response = await fetch(`${API_URL}/login`, {
             credentials: 'include'
         });
         const text = await response.text();
@@ -28,7 +28,7 @@ async function handleLogin(event) {
     }
 
     try {
-        const response = await fetch('${API_URL}/', {
+        const response = await fetch(`${API_URL}/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password }),
@@ -69,7 +69,7 @@ async function handleRegistration(event) {
     }
 
     try {
-        const response = await fetch('${API_URL}/register', {
+        const response = await fetch(`${API_URL}/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username: newUsername, password: newPassword }),
@@ -92,7 +92,7 @@ async function handleRegistration(event) {
 
 async function loadProfile() {
     try {
-        const response = await fetch('${API_URL}/profile', {
+        const response = await fetch(`${API_URL}/profile`, {
             method: 'GET',
             credentials: 'include'
         })
@@ -113,20 +113,20 @@ async function loadProfile() {
     } catch (err) {
         console.error('Error loading profile:', err);
         alert('Error loading profile.');
-        window.location.href = 'userLogin.html'; // redirect on serious error
+        window.location.href = 'index.html'; // redirect on serious error
     }
 }
 
 async function loadEditProfile(event) {
     try {
         // check if the user is authenticated
-        const authResponse = await fetch('${API_URL}/authenticated', {
+        const authResponse = await fetch(`${API_URL}/authenticated`, {
             credentials: 'include'
         });
 
         const authResult = await authResponse.text();
 
-        const profileResponse = await fetch('${API_URL}/profile', {
+        const profileResponse = await fetch(`${API_URL}/profile`, {
             credentials: 'include'
         });
 
@@ -170,7 +170,7 @@ async function saveUsername(event) {
 
     let response;
     try {
-        response = await fetch('${API_URL}/update-profile', {
+        response = await fetch(`${API_URL}/update-profile`, {
             method: 'POST',
             credentials: 'include',
             body: JSON.stringify({ username: newUsername }),
@@ -248,7 +248,7 @@ async function logoutUser(event) {
     
     try {
         // Make the server request to log out
-        const response = await fetch('/logout', {
+        const response = await fetch(`/logout`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include' // Include credentials to send cookies
