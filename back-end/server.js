@@ -30,7 +30,6 @@ app.use(expressSession({
 
 // express static middleware to serve frontend files
 const frontendPath = path.join(__dirname, '..', 'frontend');
-app.use(express.static(frontendPath));
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -386,15 +385,7 @@ app.get('/', (req, res) => {
   res.send('Welcome to the GrowZone API!');
 });
 
-// route to login
-app.get('/login', (req, res) => {
-  res.sendFile(path.join(frontendPath, 'index.html'));
-});
 
-// route to registration
-app.get('/register', (req, res) => {
-  res.sendFile(path.join(frontendPath, 'userRegister.html'));
-});
 
 // login post route: handles user login by checking against database
 app.post('/login', async (req, res) => {
